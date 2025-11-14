@@ -1,8 +1,42 @@
 "use client";
 
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Icon, Text } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
+import { HiOutlinePause, HiOutlinePlay } from "react-icons/hi2";
 
 export function Header() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      audioRef.current = new Audio("/music/ThemeMusic.mp3");
+      audioRef.current.loop = true;
+      audioRef.current.volume = 0.5;
+
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current = null;
+        }
+      };
+    }
+  }, []);
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play().catch((error) => {
+        console.error("Failed to play audio:", error);
+      });
+      setIsPlaying(true);
+    }
+  };
+
   return (
     <Flex
       w="100%"
@@ -34,7 +68,17 @@ export function Header() {
             快速複製 Unity 對話系統指令
           </Text>
         </Box>
-        <Box />
+        <Button
+          onClick={togglePlay}
+          variant="ghost"
+          size="sm"
+          colorScheme="gray"
+          leftIcon={
+            <Icon as={isPlaying ? HiOutlinePause : HiOutlinePlay} boxSize={5} />
+          }
+        >
+          {isPlaying ? "暫停" : "播放"}
+        </Button>
       </Flex>
     </Flex>
   );
