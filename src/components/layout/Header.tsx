@@ -73,11 +73,11 @@ export function Header() {
           variant="ghost"
           size="sm"
           colorScheme="gray"
-          leftIcon={
-            <Icon as={isPlaying ? HiOutlinePause : HiOutlinePlay} boxSize={5} />
-          }
         >
-          {isPlaying ? "暫停" : "播放"}
+          <Flex align="center" gap={2}>
+            <Icon as={isPlaying ? HiOutlinePause : HiOutlinePlay} boxSize={5} />
+            <Box as="span">{isPlaying ? "暫停" : "播放"}</Box>
+          </Flex>
         </Button>
       </Flex>
     </Flex>
